@@ -5,9 +5,9 @@ var entrenamiento = models.entrenamiento;
 var persona = models.persona;
 var serie = models.serie;
 
-class EjercicioControl {
+class SerieControl {
 
-    async listar_por_entrenamiento(req, res) {
+    /*async listar_por_entrenamiento(req, res) {
         const external = req.params.external;
         try {
             var entrenamientoAux = await entrenamiento.findOne({ where: { external_id: external } });
@@ -39,26 +39,30 @@ class EjercicioControl {
         } catch (error) {
 
         }
-    }
+    }*/
 
     async guardar(req, res) {
         const external = req.params.external;
         try {
-            var entrenamientoAux = await entrenamiento.findOne({ where: { external_id: external } });
-            if (req.body.hasOwnProperty('nombre')) {
+            var ejercicioAux = await ejercicio.findOne({ where: { external_id: external } });
+            if (req.body.hasOwnProperty('numero')&&
+                req.body.hasOwnProperty('peso') &&
+                req.body.hasOwnProperty('repeticiones')) {
                 var uuid = require('uuid');
                 var data = {
-                    nombre: req.body.nombre,
+                    numero: req.body.numero,
+                    peso: req.body.peso,
+                    repeticiones: req.body.repeticiones,
                     external_id: uuid.v4(),
-                    id_entrenamiento: entrenamientoAux.id
+                    id_ejercicio: ejercicioAux.id
                 }
-                var result = await ejercicio.create(data);
+                var result = await serie.create(data);
                 if (result === null) {
                     res.status(401);
-                    res.json({ msg: "Error", tag: "No se pudo guardar el ejercicio", code: 401 });
+                    res.json({ msg: "Error", tag: "No se pudo guardar la serie", code: 401 });
                 } else {
                     res.status(200);
-                    res.json({ msg: "OK", tag: "Ejercicio registrado", code: 200 });
+                    res.json({ msg: "OK", tag: "Serie registrada", code: 200 });
                 }
             } else {
                 res.status(400);
@@ -66,7 +70,7 @@ class EjercicioControl {
             }
         } catch (error) {
             res.status(400);
-            return res.status(404).json({ msg: "No existe ese entrenamiento", code: 404 });
+            return res.status(404).json({ msg: "No existe ese ejercicio", code: 404 });
         }
         /*
         try {
@@ -100,6 +104,8 @@ class EjercicioControl {
             return res.status(404).json({ msg: "No existe esa persona", code: 404 });
         }*/
     }
+
+
     //TODO
     async eliminar(req, res) {
 
@@ -107,4 +113,4 @@ class EjercicioControl {
 
 }
 
-module.exports = EjercicioControl;
+module.exports = SerieControl;

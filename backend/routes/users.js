@@ -10,6 +10,8 @@ var entrenamientoC = require('../app/controls/EntrenamientoControl');
 let entrenamientoControl = new entrenamientoC();
 var ejercicioC = require('../app/controls/EjercicioControl');
 let ejercicioControl = new ejercicioC();
+var serieC = require('../app/controls/SerieControl');
+let serieControl = new serieC();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -31,5 +33,8 @@ router.get('/usuario/entrenamientos/:external',entrenamientoControl.listar_histo
 router.post('/usuario/entrenamiento/registrar/:external', entrenamientoControl.guardar);//Enviar external de usuario
 //api de ejercicio
 router.post('/usuario/entrenamiento/:external/registrar/ejercicio', ejercicioControl.guardar); //Enviar external de entrenamiento
+router.get('/usuario/entrenamiento/:external/ejercicios', ejercicioControl.listar_por_entrenamiento);//Enviar external de entrenamiento
+//api de series
+router.post('/usuario/entrenamiento/ejercicio/:external/registrar-serie', serieControl.guardar);//Enviar external del ejercicio
 
 module.exports = router;

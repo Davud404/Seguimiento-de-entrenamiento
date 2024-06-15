@@ -17,7 +17,11 @@ class EntrenamientoControl {
                     where: { id_persona: personaAux.id },
                     attributes: ['fecha', 'external_id'],
                     include: [
-                        { model: models.ejercicio, as: 'ejercicio', attributes: ['nombre'] },
+                        { model: models.ejercicio, as: 'ejercicio', attributes: ['nombre'],
+                            include:[
+                                { model: models.serie, as: 'serie', attributes: ['numero', 'peso', 'repeticiones']}
+                            ]
+                         },
                     ]
                 });
                 if (lista === undefined || lista == null) {
