@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db: #Especificar el nombre del contenedor
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=davud
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=dbentrenamiento
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U davud -d dbentrenamiento"]
+      #Ejecuta un comando de shell para verificar si postgres puede hacer conexiones con con el usuario y la base de datos
+      interval: 5s #intervalo para ejecutar el healthcheck
+      timeout: 10s #tiempo máximo que Docker espera una respuesta de healthcheck
+      retries: 10 #número de intentos antes de marcarlo como fallido
+  
+  backend:
+    build: ./backend #Construye la imagen dentro de la ruta que se especifica
+    #el "." indica en el directorio actual
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=davud
+      - DB_PASSWORD=12345
+      - DB_NAME=dbentrenamiento
+      - DB_PORT=5432
+    depends_on:
+      - db
+volumes:
+  pgdata:
